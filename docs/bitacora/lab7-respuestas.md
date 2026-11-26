@@ -10,9 +10,32 @@ CÓMO SE RELLENA
 -->
 
 ## Parte B · C01 · Más sesiones no es más rendimiento
+
 1. ¿Cuántas llamadas por segundo y qué p95 tuviste con 1, 2 y 8 sesiones? ¿Qué número de sesiones recomiendas y por qué?
+
+- 1 sesión: 4,6 llamadas/s y p95 de 301,4 ms.
+- 2 sesiones: 8,2 llamadas/s y p95 de 347 ms.
+- 8 sesiones: 7,4 llamadas/s y p95 de 1713,6 ms.
+
+Recomiendo 2 sesiones porque se obtiene el mayor rendimiento y se reduce la latencia aproximadamente un 80 % respecto a las 8 sesiones.
+
+Evidencias: 20261126T164753Z_C01_entender.txt y 20261126T165046Z_C01_validar.txt.
+
 2. ¿Qué evento domina con 8 sesiones y qué significa en Oracle Free?
+
+El evento dominante es resmgr:cpu quantum, con 244 muestras, que representan el 74,4 % del total. Las sesiones tienen que esperar su turno para utilizar la CPU porque Oracle Free está limitado a 2 CPU. El AAS de 7,8 confirma la saturación.
+
+Evidencia: 20261126T164808Z_C01_diagnosticar.txt.
+
 3. Comprueba la ley de Little (N = X · R) con tus tres medidas.
+
+- 1 sesión: 4,6 x 0,2087 = 0,96.
+- 2 sesiones: 8,2 x 0,2409 = 1,98.
+- 8 sesiones: 7,4 x 1,0536 = 7,80.
+
+Los resultados coinciden aproximadamente con el número de sesiones de cada prueba, por lo que se cumple la ley de Little.
+
+Evidencia: 20261126T165102Z_C01_observar.txt.
 
 ## Parte C · C03 · Literales y análisis completos
 1. Análisis completos y tiempo con literales, con variables de enlace y con CURSOR_SHARING = FORCE (tus cifras).
