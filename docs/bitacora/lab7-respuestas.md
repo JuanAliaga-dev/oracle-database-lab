@@ -111,16 +111,59 @@ El optimizador consideraba CIUDAD y COMUNIDAD como columnas independientes, cuan
 Evidencias: 20261126T170144Z_C08_entender.txt y 20261126T170150Z_C08_validar.txt.
 
 ## Parte E · C12 · Estadísticas obsoletas
+
 1. Filas según las estadísticas y reales; método de unión y lecturas antes y después.
+
+Antes: las estadísticas indicaban 100 filas, pero había 200100 filas reales. Oracle utilizaba NESTED LOOPS y realizaba 212313 lecturas lógicas.
+Después de actualizar las estadísticas, Oracle estima 200100 filas, utiliza HASH JOIN y realiza 5907 lecturas lógicas.
+
+Evidencias: 20261126T170514Z_C12_diagnosticar.txt y 20261126T170518Z_C12_validar.txt.
+
 2. ¿Por qué la tarea automática no lo habría arreglado a tiempo? ¿Quién debe recoger y cuándo?
 
+La tarea automática recoge las estadísticas durante las ventanas de mantenimiento. En mi entorno, la siguiente ventana comenzaba a las 22:00 y duraba 4 horas.
+El propio proceso de carga debe recoger las estadísticas al finalizar mediante DBMS_STATS.GATHER_TABLE_STATS.
+
+Evidencia: 20261126T170521Z_C12_observar.txt.
+
 ## Parte E · C13 · El ciclo de estadísticas con red
+
 1. Describe el ciclo que seguiste (pendientes, probar, publicar, restaurar, bloquear) con la vista que comprueba cada paso.
+
+- Pendientes: PUBLISH = FALSE y comprobación en DBA_TAB_PENDING_STATS.
+- Probar: OPTIMIZER_USE_PENDING_STATISTICS = TRUE y comprobar PLAN_TABLE. La estimación pasó de 250000 a 185277 filas.
+- Publicar: PUBLISH_PENDING_STATS y comprobar DBA_TAB_STATISTICS.
+- Restaurar: RESTORE_TABLE_STATS, consultando DBA_TAB_STATS_HISTORY y comprobando DBA_TAB_COL_STATISTICS.
+- Bloquear: LOCK_TABLE_STATS y comprobar STATTYPE_LOCKED = ALL en DBA_TAB_STATISTICS.
+
+Evidencias: 20261126T170709Z_C13_entender.txt, 20261126T170717Z_C13_solucionar.txt y 20261126T170726Z_C13_observar.txt.
+
 2. ¿Qué error obtuviste al recoger sobre estadísticas bloqueadas y cómo se recoge si de verdad hace falta?
 
+Obtuve el error ORA-20005: object statistics are locked (stattype = ALL).
+Si es necesario recoger las estadísticas, se puede utilizar GATHER_TABLE_STATS con force => TRUE o desbloquearlas previamente mediante UNLOCK_TABLE_STATS.
+
+Evidencia: 20261126T170726Z_C13_observar.txt.
+
 ## Parte E · C14 · El índice invisible
+
 1. Lecturas por apertura del panel antes y después. ¿Cómo probaste el índice sin que lo viera nadie más?
+
+Antes: 5265 lecturas lógicas y 31,3 ms.
+Después: 118 lecturas lógicas y 0,58 ms.
+Creé el índice IX_T6_C14_PEND como INVISIBLE y activé OPTIMIZER_USE_INVISIBLE_INDEXES = TRUE únicamente en mi sesión. Tras comprobar la mejora, lo hice VISIBLE para todas las sesiones.
+
+Evidencias: 20261126T170732Z_C14_provocar.txt, 20261126T170740Z_C14_solucionar.txt y 20261126T170741Z_C14_validar.txt.
+
 2. Redo con el índice INVISIBLE y VISIBLE: ¿qué demuestra?
+
+- Sin mantener el índice: 9007 KB.
+- Índice INVISIBLE: 10402 KB.
+- Índice VISIBLE: 10402 KB.
+
+Esto demuestra que un índice invisible tiene el mismo coste de mantenimiento durante las operaciones DML que uno visible. La diferencia es que el optimizador no lo utiliza por defecto.
+
+Evidencia: 20261126T170745Z_C14_observar.txt.
 
 ## Parte F · C17 · INC-604 con AWR, ASH y ADDM
 1. SLI y SLO; p95 antes y después; instantáneas AWR que usaste.
