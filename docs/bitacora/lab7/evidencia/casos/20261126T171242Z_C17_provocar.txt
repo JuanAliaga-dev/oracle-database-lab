@@ -1,0 +1,17 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:12:43Z origen=t6/C17_provocar
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10372360
+
+==================== Línea base del incidente: instantánea AWR, la web en producción (V1) y otra instantánea ====================
+
+-- Instantánea AWR inicial
+V1_INI=15
+   carga C17_V1: 3 sesiones de la aplicación durante 120 s ...
+   carga C17_V1 terminada
+
+-- Instantánea AWR final
+V1_FIN=16
+
+-- Hecho. Atención al cliente ha abierto el INC-604. Siguiente fase: caso C17 entender
+
+-- Línea base ANTES de tocar nada (runbook RB-1): t6 base registrar ANTES SQL_ID C17
+Uso: t6 base registrar ETIQUETA SQL_ID [caso]

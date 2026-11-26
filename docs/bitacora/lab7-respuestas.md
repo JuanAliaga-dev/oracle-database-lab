@@ -165,13 +165,46 @@ Esto demuestra que un índice invisible tiene el mismo coste de mantenimiento du
 
 Evidencia: 20261126T170745Z_C14_observar.txt.
 
-## Parte F · C17 · INC-604 con AWR, ASH y ADDM
+## Parte F · C17 · INC-604 de principio a fin
+
 1. SLI y SLO; p95 antes y después; instantáneas AWR que usaste.
+
+- SLI: latencia p95 de las búsquedas.
+- SLO: p95 inferior a 20 ms.
+- Antes: 63,3 ms.
+- Después: 1,07 ms.
+- Intervalo AWR inicial: snapshots 21 y 22.
+
+Evidencias: 20261126T172120Z_C17_entender.txt y 20261126T172342Z_C17_validar.txt.
+
 2. ¿Qué dijeron ASH, AWR y ADDM, y qué no podían decirte? ¿Cuál fue el ÚNICO cambio?
 
+- ASH: identificó el SQL 0dbx7196jdajy, con 421 muestras ON CPU y 52 esperando CPU.
+- AWR: registró 4321 ejecuciones y 5039 lecturas por ejecución.
+- ADDM: identificó las sentencias SQL principales como un problema con un impacto del 90,63 %.
+- El plan real permitió identificar la causa: TO_NUMBER sobre CODIGO_POSTAL.
+- Único cambio: sustituir la V1 (NUMBER) por la V2 (VARCHAR2), permitiendo utilizar el índice IX_T6_PED_CP.
+
+Evidencias: 20261126T172122Z_C17_diagnosticar.txt y 20261126T172123Z_C17_solucionar.txt.
+
 ## Parte F · C18 · SQL Plan Management
+
 1. PLAN_HASH_VALUE y lecturas del lunes, del martes y con la línea base.
+
+- Lunes: plan 1767728868 y 195 lecturas por ejecución.
+- Martes: plan 2571571058 y 5227 lecturas por ejecución.
+- Con SPM: plan 1767728868 y 192 lecturas por ejecución.
+
+Evidencias: 20261126T171517Z_C18_entender.txt y 20261126T171525Z_C18_validar.txt.
+
 2. ¿Qué hizo la evolución con el plan nuevo y por qué? ¿Qué queda pendiente para que no vuelva a pasar?
+
+- La evolución rechazó el nuevo plan porque no superó el criterio de beneficio.
+- El plan anterior permanece aceptado y activo.
+- El nuevo permanece como ACCEPTED = NO.
+- Queda pendiente corregir las preferencias de recogida de estadísticas para conservar el histograma de ESTADO.
+
+Evidencia: 20261126T171528Z_C18_observar.txt.
 
 ## Parte G · Incidente 1 · INC-6NN
 - **Síntoma (con números):**

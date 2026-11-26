@@ -1,0 +1,9 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:23:43Z origen=t6/C17_validar
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10383373
+   carga C17_V2: 3 sesiones de la aplicación durante 120 s ...
+   carga C17_V2 terminada
+OK    SLO de la búsqueda: p95 V2 = 1.07 ms (< 20) · antes 63.3 ms
+OK    Capacidad con la misma carga: 33264 búsquedas frente a 4412
+OK    AWR (deltas del intervalo): lecturas por ejecución 94 en V2 frente a 5039 en V1
+OK    Línea base ANTES y DESPUES registradas (t6 base ver C17)
+OK    La V2 usa el índice IX_T6_PED_CP
