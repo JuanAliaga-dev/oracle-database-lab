@@ -38,12 +38,41 @@ Los resultados coinciden aproximadamente con el número de sesiones de cada prue
 Evidencia: 20261126T165102Z_C01_observar.txt.
 
 ## Parte C · C03 · Literales y análisis completos
+
 1. Análisis completos y tiempo con literales, con variables de enlace y con CURSOR_SHARING = FORCE (tus cifras).
+
+- LITERAL: 5047 hard parses y 4650 ms.
+- BIND: 28 hard parses y 330 ms.
+- FORCE: 28 hard parses y 540 ms.
+
+Las variables de enlace reducen los análisis completos y permiten ejecutar la misma carga unas 14 veces más rápido.
+
+Evidencia: 20261126T165647Z_C03_observar.txt.
+
 2. ¿Por qué FORCE es un puente y no la solución? ¿Qué ve el DBA en V$SQL que lo delata (FORCE_MATCHING_SIGNATURE)?
 
+FORCE sustituye automáticamente los literales por variables, pero no corrige el problema de la aplicación y puede afectar a la selectividad. La solución definitiva es utilizar variables de enlace.
+En V$SQL aparecen 687 SQL_ID distintos con la misma FORCE_MATCHING_SIGNATURE y una ejecución por sentencia.
+
+Evidencias: 20261126T165641Z_C03_diagnosticar.txt y 20261126T165647Z_C03_observar.txt.
+
 ## Parte C · C04 · El informe que se desborda a TEMP
+
 1. Bloques de TEMP, tipo de pasada y tiempo del informe antes y después. ¿Qué hacía el disparador de logon?
+
+- LEGADO: 5456 bloques escritos en TEMP, ONE PASS y 2810 ms.
+- AUTO_COMPLETO: 0 bloques, OPTIMAL y 1180 ms.
+- AUTO_TOP100: 0 bloques, OPTIMAL y 130 ms.
+
+El disparador C04_LEGADO establecía WORKAREA_SIZE_POLICY = MANUAL y limitaba SORT_AREA_SIZE a 1 MB.
+
+Evidencias: 20261126T165701Z_C04_diagnosticar.txt y 20261126T165707Z_C04_observar.txt.
+
 2. ¿Por qué el TOP 100 cabe en memoria y el informe completo no?
+
+El TOP 100 solo necesita mantener las 100 mejores filas durante la ordenación, mientras que el informe completo procesa un millón de filas. Con la configuración heredada, el informe necesitaba 48 MB y disponía de aproximadamente 1 MB, por lo que utilizaba TEMP. Con la gestión automática, ambos consiguen ejecutarse en memoria.
+
+Evidencias: 20261126T165701Z_C04_diagnosticar.txt y 20261126T165707Z_C04_observar.txt.
 
 ## Parte D · C07 · EXPLAIN PLAN frente al plan real
 1. Copia el predicado que delata el problema en el plan real y explica de dónde sale.
