@@ -75,12 +75,40 @@ El TOP 100 solo necesita mantener las 100 mejores filas durante la ordenación, 
 Evidencias: 20261126T165701Z_C04_diagnosticar.txt y 20261126T165707Z_C04_observar.txt.
 
 ## Parte D · C07 · EXPLAIN PLAN frente al plan real
+
 1. Copia el predicado que delata el problema en el plan real y explica de dónde sale.
+
+filter(TO_NUMBER("CODIGO_POSTAL")=:B1)
+
+La aplicación enviaba la variable como NUMBER, mientras que CODIGO_POSTAL es de tipo texto. Oracle realizaba una conversión implícita sobre la columna, impidiendo utilizar el índice y provocando un TABLE ACCESS FULL.
+
+Evidencia: 20261126T170133Z_C07_diagnosticar.txt.
+
 2. Lecturas y p95 de V1 y V2. ¿Por qué EXPLAIN PLAN no lo vio?
 
+- V1: 5227 lecturas y p95 de 156 ms.
+- V2: 95 lecturas y p95 de 1,1 ms.
+
+EXPLAIN PLAN no ejecuta la consulta ni conoce el tipo real de la variable. DISPLAY_CURSOR muestra el plan utilizado durante la ejecución. Al corregir el tipo de la variable, Oracle utiliza el índice IX_T6_PED_CP.
+
+Evidencias: 20261126T170131Z_C07_entender.txt y 20261126T170136Z_C07_validar.txt.
+
 ## Parte D · C08 · E-Rows frente a A-Rows
+
 1. Estimación y filas reales antes y después del grupo de columnas. ¿En qué línea del plan se separan por primera vez?
+
+- Antes: 3 filas estimadas y 56 reales.
+- Después: 50 filas estimadas y 56 reales.
+
+La primera desviación importante aparece en la línea 3 del plan, TABLE ACCESS BY INDEX ROWID BATCHED sobre CLIENTE, donde se aplica el filtro de COMUNIDAD.
+
+Evidencias: 20261126T170146Z_C08_diagnosticar.txt y 20261126T170148Z_C08_solucionar.txt.
+
 2. ¿Por qué el optimizador multiplicaba mal las dos selectividades?
+
+El optimizador consideraba CIUDAD y COMUNIDAD como columnas independientes, cuando realmente están correlacionadas, ya que cada ciudad pertenece a una comunidad. Al crear estadísticas extendidas sobre ambas columnas, Oracle tiene en cuenta sus combinaciones y mejora la estimación de 3 a 50 filas.
+
+Evidencias: 20261126T170144Z_C08_entender.txt y 20261126T170150Z_C08_validar.txt.
 
 ## Parte E · C12 · Estadísticas obsoletas
 1. Filas según las estadísticas y reales; método de unión y lecturas antes y después.
