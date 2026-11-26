@@ -1,0 +1,17 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:29:45Z origen=t6/top
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10386631
+== Top 10 sentencias por elapsed (filtro: -) ==
+
+SQL_ID         PLAN_HASH       EJEC SEG_TOTAL    MS_EJEC  GETS_EJEC FILAS_EJEC TEXTO
+------------- ---------- ---------- --------- ---------- ---------- ---------- ------------------------------------------
+b881wb311grva          0      36827       3.7        0.1          1          1 INSERT INTO T6.APP_LOG (ETQ, MS) VALUES (:
+bxu1s25bf60rv          0          6       0.9      156.4       4168          1 begin prvt_hdm.execute_manual_actions( :db
+7qb74y7hp6cwd 3154421282        125       0.7        5.4         14          1  select st.dbid, st.atskid, nvl(ctl.instan
+2sxqgx5hx76qr 3312420081       8954       0.5        0.1          3         15 select /*+ rule */ bucket, endpoint, col#,
+121ffmrc95v7g 2542797530       1270       0.4        0.3          7          1 select i.obj#,i.ts#,i.file#,i.block#,i.int
+b39m8n96gxk7c          0          3       0.4      130.6       6171          0 call dbms_autotask_prvt.run_autotask ( :0,
+ampw9ddqufjd3          0          1       0.4      369.4      17441          1 begin /*KAPI:capture*/ dbms_auto_index_int
+28jacy77743hk  609841192          1       0.3      339.2        825          3 SELECT CASE WHEN s.num_rows BETWEEN 0.9 *
+8hn59jfgw00y7 1767728868         20       0.3       13.6        192          1 SELECT /* t6_c18_pendientes */ COUNT(*), S
+0vz3zkn2448tk  444225040          4       0.2       56.2        882         19 SELECT PLAN_TABLE_OUTPUT FROM TABLE(CAST(D
+-- Siguiente paso: «t6 plan SQL_ID» para ver el plan real de la que más pesa.

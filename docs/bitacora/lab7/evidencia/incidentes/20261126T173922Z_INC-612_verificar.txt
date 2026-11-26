@@ -1,0 +1,10 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:39:22Z origen=t6/INC-612_verificar
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10387520
+== INC-612 · verificar · alumno E002 · semilla 2
+
+Session altered.
+
+OK    Incidente INC-612 roto para E002 (semilla 2) el 2026-11-26 17:37 · correo de prueba Cliente2622@TiendaSur.es
+OK    CLIENTE tiene un índice basado en función
+OK    La búsqueda por correo va por índice (no recorre CLIENTE entera)
+OK    Lecturas de la búsqueda por correo: 110

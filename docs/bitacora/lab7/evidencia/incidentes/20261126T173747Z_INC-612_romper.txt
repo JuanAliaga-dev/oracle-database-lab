@@ -1,0 +1,7 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:37:47Z origen=t6/INC-612_romper
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10387366
+== INC-612 · romper · alumno E002 · semilla 2
+
+Session altered.
+
+Roto: «¿Olvidaste tu contraseña?» ya no responde como ayer.

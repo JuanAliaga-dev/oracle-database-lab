@@ -206,30 +206,59 @@ Evidencias: 20261126T171517Z_C18_entender.txt y 20261126T171525Z_C18_validar.txt
 
 Evidencia: 20261126T171528Z_C18_observar.txt.
 
-## Parte G · Incidente 1 · INC-6NN
-- **Síntoma (con números):**
-- **Playbook y pasos seguidos (herramientas y vistas):**
-- **Causa raíz:**
-- **Arreglo aplicado (órdenes exactas) y por qué ese:**
-- **Verificación (archivo de evidencia con todo OK):**
-- **Prevención (qué evitaría que se repita):**
+## Parte G · Incidente 1 · INC-605
 
-## Parte G · Incidente 2 · INC-6NN
-- **Síntoma (con números):**
-- **Playbook y pasos seguidos (herramientas y vistas):**
-- **Causa raíz:**
-- **Arreglo aplicado (órdenes exactas) y por qué ese:**
-- **Verificación (archivo de evidencia con todo OK):**
-- **Prevención (qué evitaría que se repita):**
+- **Síntoma (con números):** El informe de cestas abandonadas tarda más tras una carga de 152000 filas nuevas. Las estadísticas indican 100 filas frente a 152100 reales.
 
-## Parte G · Incidente 3 · INC-6NN
-- **Síntoma (con números):**
-- **Playbook y pasos seguidos (herramientas y vistas):**
-- **Causa raíz:**
-- **Arreglo aplicado (órdenes exactas) y por qué ese:**
-- **Verificación (archivo de evidencia con todo OK):**
-- **Prevención (qué evitaría que se repita):**
+- **Playbook y pasos seguidos (herramientas y vistas):** PB-3 y RB-2. Utilicé t6 estad CESTA, t6 top 10 elapsed, DBA_TAB_STATISTICS y SELECT COUNT(*) FROM t6.cesta.
 
+- **Causa raíz:** Estadísticas obsoletas (STALE_STATS = YES) y bloqueadas (STATTYPE_LOCKED = ALL), provocando una estimación incorrecta de la cardinalidad.
+
+- **Arreglo aplicado (órdenes exactas) y por qué ese:**
+  EXEC DBMS_STATS.UNLOCK_TABLE_STATS('T6', 'CESTA');
+  EXEC DBMS_STATS.GATHER_TABLE_STATS('T6', 'CESTA', no_invalidate => FALSE);
+  Desbloqueé y actualicé las estadísticas para corregir la estimación del optimizador.
+
+- **Verificación (archivo de evidencia con todo OK):** 152100 filas estimadas y reales. El informe utiliza HASH JOIN. Todas las comprobaciones dan OK.
+  Evidencia: 20261126T173214Z_INC-605_verificar.txt.
+
+- **Prevención (qué evitaría que se repita):** Mantener las estadísticas desbloqueadas y recogerlas después de cada carga masiva. La tarea automática no podía actualizarlas debido al bloqueo.
+
+## Parte G · Incidente 2 · INC-606
+
+- **Síntoma (con números):** La búsqueda por código postal de la versión V2 realizaba 5311 lecturas lógicas por búsqueda.
+
+- **Playbook y pasos seguidos (herramientas y vistas):** PB-2 y RB-3. Utilicé t6 indices PEDIDO, t6 top 5 gets t6_cp, t6 plan 53mx77snb43uw y consulté DBA_INDEXES.
+
+- **Causa raíz:** El índice IX_T6_PED_CP estaba en estado UNUSABLE aunque era VISIBLE. Esto provocaba un TABLE ACCESS FULL sobre PEDIDO, a pesar de que la aplicación utilizaba correctamente VARCHAR2.
+
+- **Arreglo aplicado (órdenes exactas) y por qué ese:**
+  ALTER INDEX T6.IX_T6_PED_CP REBUILD;
+  Reconstruí el índice existente para recuperar su estado VALID sin modificar la aplicación ni crear otro índice.
+
+- **Verificación (archivo de evidencia con todo OK):** El índice está VALID y VISIBLE. La V2 vuelve a utilizarlo y las lecturas por búsqueda se reducen de 5311 a 95.
+  Evidencia: 20261126T173616Z_INC-606_verificar.txt.
+
+- **Prevención (qué evitaría que se repita):** Monitorizar el estado de los índices mediante DBA_INDEXES y comprobar su utilización y rendimiento después de operaciones de mantenimiento o cargas masivas.
+
+## Parte G · Incidente 3 · INC-612
+
+- **Síntoma (con números):** La búsqueda de correo electrónico para recuperar la contraseña realizaba 1426 lecturas lógicas por búsqueda.
+
+- **Playbook y pasos seguidos (herramientas y vistas):** PB-5 y RB-3. Utilicé t6 indices CLIENTE, t6 top 5 cpu y consulté las vistas DBA_INDEXES y DBA_IND_EXPRESSIONS.
+
+- **Causa raíz:** Se había eliminado el índice basado en función sobre UPPER(email). El índice convencional sobre EMAIL no era adecuado para la consulta que aplica UPPER a la columna.
+
+- **Arreglo aplicado (órdenes exactas) y por qué ese:**
+  CREATE INDEX T6.IX_T6_CLI_EMAIL_UPPER
+  ON T6.CLIENTE (UPPER(email))
+  TABLESPACE TBS_T6;
+  Creé un índice basado en función para optimizar la consulta sin modificar el código de la aplicación.
+
+- **Verificación (archivo de evidencia con todo OK):** El índice es FUNCTION-BASED NORMAL, VALID y VISIBLE. La búsqueda vuelve a utilizar un índice y las lecturas se reducen de 1426 a 110.
+  Evidencia: 20261126T173922Z_INC-612_verificar.txt.
+
+- **Prevención (qué evitaría que se repita):** Antes de eliminar un índice, establecerlo como INVISIBLE y monitorizar su uso mediante DBA_INDEX_USAGE durante varias semanas. Comprobar que su retirada no perjudica al rendimiento antes de ejecutar DROP INDEX.
 ## Parte H · Reflexión
 1. De todo el laboratorio, ¿qué cambio dio más mejora por menos riesgo? Justifícalo con tus números.
 2. Un caso no evaluable (sin ★) que hayas hecho y qué aprendiste de él (opcional, cuenta para la certificación).

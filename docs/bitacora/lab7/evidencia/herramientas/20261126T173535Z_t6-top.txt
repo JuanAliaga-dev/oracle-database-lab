@@ -1,0 +1,10 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:35:35Z origen=t6/top
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10387120
+== Top 5 sentencias por gets (filtro: t6_cp) ==
+
+SQL_ID         PLAN_HASH       EJEC SEG_TOTAL    MS_EJEC  GETS_EJEC FILAS_EJEC TEXTO
+------------- ---------- ---------- --------- ---------- ---------- ---------- ------------------------------------------
+53mx77snb43uw 2571571058         20       0.6       28.9       5311          1 SELECT /*+ t6_cp_v2 */ COUNT(*), SUM(IMPOR
+9gs99b73q45h6  339219083          1       0.0       29.3        516          1 SELECT CASE WHEN COUNT(*) > 0 THEN 'OK ' E
+83td54pfwcqz1 1001747286          1       0.0        9.5         12          1 SELECT CASE WHEN MAX(buffer_gets / executi
+-- Siguiente paso: «t6 plan SQL_ID» para ver el plan real de la que más pesa.
