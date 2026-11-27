@@ -2,33 +2,41 @@ He leído la política de uso de IA de la asignatura.
 
 # Declaración de uso de IA · Lab 7 · E002
 
-<!--
-CÓMO SE RELLENA (léelo y borra este comentario si quieres; el script de evaluación lo ignora)
-- La PRIMERA línea es obligatoria y no se toca: «He leído la política de uso de IA de la asignatura.»
-- Copia este archivo como docs/bitacora/lab7-ia.md (junto a lab7-respuestas.md) y pon tu código en el título.
-  Cada laboratorio tiene el suyo: el del Lab 6 (lab6-ia.md) no se toca.
-- Si NO has usado IA: deja solo la línea «No he usado IA.» y borra la entrada de ejemplo.
-- Si la has usado: borra la línea «No he usado IA.» y escribe UNA entrada por cada uso, con los 7 campos.
-  Un campo vacío es una entrada incompleta (D3: −0,5 por entrada).
-- Preguntar a la IA como tutor o corregir la ortografía de un texto propio está permitido: decláralo también.
-  Si no copiaste código, escribe «no aplica» en «Código recibido» y en «Evidencia de ejecución» (no cuentan como vacíos).
-  Los demás campos son siempre obligatorios.
-- Una entrada con TODOS los campos vacíos (la de ejemplo sin tocar) no cuenta: se ignora.
-- El código copiado de una IA puntúa si lo EJECUTAS en tu contenedor, lo EXPLICAS con tus palabras,
-  dices para qué lo usaste y adjuntas aquí el código y el prompt LITERAL.
--->
-
 ## Entrada 1
-- **Herramienta:** 
+- **Herramienta:** ChatGPT.
 - **Prompt (literal, copiado tal cual):**
 ```text
-
+tengo que hacer esta tarea de lab 7 me puedes ayudar con ella
 ```
-- **Código recibido (el fragmento, o la ruta del archivo donde está):**
+- **Código recibido:** no aplica para la orientación inicial.
+- **Dónde lo usé:** Parte A.
+- **Propósito:** Comprender la organización del laboratorio.
+- **Qué hace:** Me orientó sobre la preparación del entorno y las fases de la práctica.
+- **Evidencia de ejecución:** no aplica.
+
+## Entrada 2
+- **Herramienta:** ChatGPT.
+- **Prompt:** Consulta sobre los resultados del INC-605. Adjunté la salida de la terminal.
+- **Código recibido:**
 ```sql
-
+EXEC DBMS_STATS.UNLOCK_TABLE_STATS('T6', 'CESTA');
+EXEC DBMS_STATS.GATHER_TABLE_STATS('T6', 'CESTA', no_invalidate => FALSE);
 ```
-- **Dónde lo usé (parte, script o pregunta):** 
-- **Propósito (para qué lo necesitaba):** 
-- **Qué hace (con mis palabras; línea a línea si es SQL corto):** 
-- **Evidencia de ejecución (archivo de docs/bitacora/lab7/evidencia con mi cabecera):** 
+- **Dónde lo usé:** Parte G, INC-605.
+- **Propósito:** Resolver el problema de las estadísticas bloqueadas.
+- **Qué hace:** Desbloquea las estadísticas de CESTA y actualiza la información utilizada por el optimizador.
+- **Evidencia de ejecución:** docs/bitacora/lab7/evidencia/incidentes/20261126T173214Z_INC-605_verificar.txt.
+
+## Entrada 3
+- **Herramienta:** ChatGPT.
+- **Prompt:** Consulta sobre los resultados del INC-612. Adjunté la salida de la terminal.
+- **Código recibido:**
+```sql
+CREATE INDEX T6.IX_T6_CLI_EMAIL_UPPER
+ON T6.CLIENTE (UPPER(email))
+TABLESPACE TBS_T6;
+```
+- **Dónde lo usé:** Parte G, INC-612.
+- **Propósito:** Recuperar el acceso eficiente por correo electrónico.
+- **Qué hace:** Crea un índice basado en función para las búsquedas que utilizan UPPER(email).
+- **Evidencia de ejecución:** docs/bitacora/lab7/evidencia/incidentes/20261126T173922Z_INC-612_verificar.txt.

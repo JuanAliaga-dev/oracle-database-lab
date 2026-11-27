@@ -1,3 +1,12 @@
 config/.env
 backups/
 scripts/t6/salidas/
+
+# Oracle database files and traces
+*.ora
+*.dbf
+*.ctl
+*.arc
+*.bkp
+*.trc
+*.prf

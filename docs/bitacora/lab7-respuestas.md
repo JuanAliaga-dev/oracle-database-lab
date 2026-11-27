@@ -260,5 +260,17 @@ Evidencia: 20261126T171528Z_C18_observar.txt.
 
 - **Prevención (qué evitaría que se repita):** Antes de eliminar un índice, establecerlo como INVISIBLE y monitorizar su uso mediante DBA_INDEX_USAGE durante varias semanas. Comprobar que su retirada no perjudica al rendimiento antes de ejecutar DROP INDEX.
 ## Parte H · Reflexión
+
 1. De todo el laboratorio, ¿qué cambio dio más mejora por menos riesgo? Justifícalo con tus números.
+
+El cambio de NUMBER a VARCHAR2 en el caso C17.
+La latencia p95 pasó de 63,3 ms a 1,07 ms y las
+lecturas por ejecución de 5039 a 94.
+Con la misma carga se pasó de 4412 a 33264 búsquedas.
+El riesgo fue reducido porque no fue necesario modificar
+las tablas ni crear índices adicionales.
+
 2. Un caso no evaluable (sin ★) que hayas hecho y qué aprendiste de él (opcional, cuenta para la certificación).
+
+No realizado. He completado los diez casos obligatorios
+y los tres incidentes personalizados.
