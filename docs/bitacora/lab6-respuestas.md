@@ -44,7 +44,7 @@ No habría sido correcto aplicar automáticamente el mismo procedimiento a `proc
 
 La comprobación posterior confirmó que `db_files` volvía a aparecer con `ISSPECIFIED = FALSE`.
 
-**Evidencia:** `02-parametros.script.log` y `02-init_desde_spfile.ora`.
+**Evidencia:** `02-parametros.script.log` y `02-init_desde_spfile.ora.txt`.
 
 ### 5. Estado de la PDB después de reiniciar
 

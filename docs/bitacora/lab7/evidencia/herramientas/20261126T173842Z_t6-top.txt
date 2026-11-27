@@ -1,0 +1,12 @@
+== EVIDENCIA alumno=E002 hora=2026-11-26T17:38:42Z origen=t6/top
+== EVIDENCIA contenedor=9aa1f0c03ca0 dbid=1509902213 arranque=2026-11-26T16:34:32 scn=10387417
+== Top 5 sentencias por cpu (filtro: -) ==
+
+SQL_ID         PLAN_HASH       EJEC SEG_TOTAL    MS_EJEC  GETS_EJEC FILAS_EJEC TEXTO
+------------- ---------- ---------- --------- ---------- ---------- ---------- ------------------------------------------
+2sxqgx5hx76qr 3312420081      10575       0.5        0.0          3         16 select /*+ rule */ bucket, endpoint, col#,
+56u1x8u083t7j 1977142670          1       0.4      411.3        753          3 SELECT i.index_name, (SELECT LISTAGG(colum
+4zxrh77d4v3vj 1738720349       1592       0.2        0.1          1          0 SELECT idx_objn, nvl(idx_objd, 0), idx_bas
+bk8r3n96mg6ub 3962419441          1       0.1      143.7       1561         10 SELECT column_name, num_distinct, ROUND(10
+gzus346fntazp 3903051286        375       0.1        0.4         11          1 select nvl(count(1), 0) from commit_scn_lo
+-- Siguiente paso: «t6 plan SQL_ID» para ver el plan real de la que más pesa.
